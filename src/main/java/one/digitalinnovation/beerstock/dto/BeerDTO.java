@@ -33,6 +33,10 @@ public class BeerDTO {
     private Integer max;
 
     @NotNull
+    @Max(500)
+    private Integer min;
+
+    @NotNull
     @Max(100)
     private Integer quantity;
 

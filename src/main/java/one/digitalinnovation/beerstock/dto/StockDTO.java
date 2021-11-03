@@ -12,9 +12,13 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuantityDTO {
+public class StockDTO {
+
+    private Long id;
 
     @NotNull
     @Max(100)
     private Integer quantity;
+
+
 }

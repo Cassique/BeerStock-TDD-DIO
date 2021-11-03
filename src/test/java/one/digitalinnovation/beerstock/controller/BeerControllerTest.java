@@ -2,9 +2,8 @@ package one.digitalinnovation.beerstock.controller;
 
 import one.digitalinnovation.beerstock.builder.BeerDTOBuilder;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
-import one.digitalinnovation.beerstock.dto.QuantityDTO;
+import one.digitalinnovation.beerstock.dto.StockDTO;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
-import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
 import one.digitalinnovation.beerstock.service.BeerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,6 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -176,7 +174,7 @@ public class BeerControllerTest {
 
     @Test
     void whenPATCHIsCalledToIncrementDiscountThenOKstatusIsReturned() throws Exception {
-        QuantityDTO quantityDTO = QuantityDTO.builder()
+        StockDTO quantityDTO = StockDTO.builder()
                 .quantity(10)
                 .build();
 
@@ -196,7 +194,7 @@ public class BeerControllerTest {
 
 //    @Test
 //    void whenPATCHIsCalledToIncrementGreatherThanMaxThenBadRequestStatusIsReturned() throws Exception {
-//        QuantityDTO quantityDTO = QuantityDTO.builder()
+//        StockDTO quantityDTO = StockDTO.builder()
 //                .quantity(30)
 //                .build();
 //
@@ -212,7 +210,7 @@ public class BeerControllerTest {
 
 //    @Test
 //    void whenPATCHIsCalledWithInvalidBeerIdToIncrementThenNotFoundStatusIsReturned() throws Exception {
-//        QuantityDTO quantityDTO = QuantityDTO.builder()
+//        StockDTO quantityDTO = StockDTO.builder()
 //                .quantity(30)
 //                .build();
 //
@@ -225,7 +223,7 @@ public class BeerControllerTest {
 //
 //    @Test
 //    void whenPATCHIsCalledToDecrementDiscountThenOKstatusIsReturned() throws Exception {
-//        QuantityDTO quantityDTO = QuantityDTO.builder()
+//        StockDTO quantityDTO = StockDTO.builder()
 //                .quantity(5)
 //                .build();
 //
@@ -245,7 +243,7 @@ public class BeerControllerTest {
 //
 //    @Test
 //    void whenPATCHIsCalledToDEcrementLowerThanZeroThenBadRequestStatusIsReturned() throws Exception {
-//        QuantityDTO quantityDTO = QuantityDTO.builder()
+//        StockDTO quantityDTO = StockDTO.builder()
 //                .quantity(60)
 //                .build();
 //
@@ -261,7 +259,7 @@ public class BeerControllerTest {
 //
 //    @Test
 //    void whenPATCHIsCalledWithInvalidBeerIdToDecrementThenNotFoundStatusIsReturned() throws Exception {
-//        QuantityDTO quantityDTO = QuantityDTO.builder()
+//        StockDTO quantityDTO = StockDTO.builder()
 //                .quantity(5)
 //                .build();
 //
