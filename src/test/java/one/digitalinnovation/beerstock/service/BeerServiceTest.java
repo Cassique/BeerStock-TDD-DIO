@@ -6,10 +6,7 @@ import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.dto.StockDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
 import one.digitalinnovation.beerstock.entity.Stock;
-import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
-import one.digitalinnovation.beerstock.exception.BeerEmptyStockException;
-import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
-import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
+import one.digitalinnovation.beerstock.exception.*;
 import one.digitalinnovation.beerstock.mapper.BeerMapper;
 import one.digitalinnovation.beerstock.mapper.StockMapper;
 import one.digitalinnovation.beerstock.repository.BeerRepository;
@@ -216,7 +213,7 @@ public class BeerServiceTest {
     }
 
     @Test
-    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
+    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, ExceededBeerStockMinCapacityException {
 
         //given
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
