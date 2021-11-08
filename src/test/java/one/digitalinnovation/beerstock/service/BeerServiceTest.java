@@ -1,16 +1,12 @@
 package one.digitalinnovation.beerstock.service;
 
 import one.digitalinnovation.beerstock.builder.BeerDTOBuilder;
-import one.digitalinnovation.beerstock.builder.StockDTOBuilder;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
-import one.digitalinnovation.beerstock.dto.StockDTO;
+import one.digitalinnovation.beerstock.dto.QuantityDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
-import one.digitalinnovation.beerstock.entity.Stock;
 import one.digitalinnovation.beerstock.exception.*;
 import one.digitalinnovation.beerstock.mapper.BeerMapper;
-import one.digitalinnovation.beerstock.mapper.StockMapper;
 import one.digitalinnovation.beerstock.repository.BeerRepository;
-import one.digitalinnovation.beerstock.repository.StockRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,12 +39,7 @@ public class BeerServiceTest {
     @Mock
     private BeerRepository beerRepository;
 
-    @Mock
-    private StockRepository stockRepository;
-
     private BeerMapper beerMapper = BeerMapper.INSTANCE;
-
-    private StockMapper stockMapper = StockMapper.INSTANCE;
 
     @InjectMocks
     private BeerService beerService;
@@ -213,7 +204,7 @@ public class BeerServiceTest {
     }
 
     @Test
-    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, ExceededBeerStockMinCapacityException {
+    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, BeerStockMinCapacityExceededException {
 
         //given
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
@@ -232,15 +223,19 @@ public class BeerServiceTest {
     }
     @Test
     void whenDecrementIsCalledToEmptyStockThenEmptyBeerStock() throws BeerNotFoundException {
+
         //given
-        StockDTO expectedStockDTO = StockDTOBuilder.builder().build().toStockDTO();
-        Stock expectedStock = stockMapper.toModel(expectedStockDTO);
+        QuantityDTO expectedStockDTO = QuantityDTO.builder()
+                .quantity(10)
+                .build();
+        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        //Stock expectedStock = stockMapper.toModel(expectedStockDTO);
 
         //when
         int quantityToDecrement = 80;
 
         //then
-        assertThrows(BeerNotFoundException.class, () -> beerService.decrement(expectedStockDTO.getId(), quantityToDecrement));
+        assertThrows(BeerNotFoundException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
 
     @Test

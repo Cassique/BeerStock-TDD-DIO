@@ -24,7 +24,7 @@ public class BeerDTO {
     @Size(min = 1, max = 200)
     private String name;
 
-    @NotNull
+    //@NotNull
     @Size(min = 1, max = 200)
     private String brand;
 
