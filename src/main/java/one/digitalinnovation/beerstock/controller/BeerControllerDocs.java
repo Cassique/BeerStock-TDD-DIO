@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
+import one.digitalinnovation.beerstock.exception.BeerStockRequiredFieldException;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface BeerControllerDocs {
             @ApiResponse(code = 201, message = "Success beer creation"),
             @ApiResponse(code = 400, message = "Missing required fields or wrong field range value.")
     })
-    BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException;
+    BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException, BeerStockRequiredFieldException;
 
     @ApiOperation(value = "Returns beer found by a given name")
     @ApiResponses(value = {
