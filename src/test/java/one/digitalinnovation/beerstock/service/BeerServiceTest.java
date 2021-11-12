@@ -151,7 +151,7 @@ public class BeerServiceTest {
     }
 
     @Test
-    void whenIncrementIsCalledThenIncrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
+    void whenIncrementIsCalledThenIncrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, NegativeInputException {
         //given
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         Beer expectedBeer = beerMapper.toModel(expectedBeerDTO);
@@ -208,7 +208,7 @@ public class BeerServiceTest {
     }
 
     @Test
-    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, BeerStockMinCapacityExceededException {
+    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, BeerStockMinCapacityExceededException, NegativeInputException {
 
         //given
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
@@ -243,7 +243,7 @@ public class BeerServiceTest {
     }
 
     @Test
-    void whenDecrementIsLowerThanZeroThenThrowException() {
+    void whenDecrementAfterSumIsLowerThanZeroThenThrowException() {
         //given
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         Beer expectedBeer = beerMapper.toModel(expectedBeerDTO);
@@ -252,6 +252,18 @@ public class BeerServiceTest {
         int quantityToDecrement = 80;
         //then
         assertThrows(BeerStockMinCapacityExceededException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
+    }
+
+    @Test
+    void whenDecrementBeforeSumIsLowerThanZeroThenThrowException() {
+        //given
+        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer expectedBeer = beerMapper.toModel(expectedBeerDTO);
+        //when
+        when(beerRepository.findById(expectedBeerDTO.getId())).thenReturn(Optional.of(expectedBeer));
+        int quantityToDecrement = -1;
+        //then
+        assertThrows(NegativeInputException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
 
     @Test

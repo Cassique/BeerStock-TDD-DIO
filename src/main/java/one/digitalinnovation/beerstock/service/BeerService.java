@@ -27,13 +27,6 @@ public class BeerService {
         return beerMapper.toDTO(savedBeer);
     }
 
-    private BeerDTO verifyIfFieldsAreNotNull(BeerDTO beerDTO) throws BeerStockRequiredFieldException {
-        if (beerDTO.getQuantity() != null && beerDTO.getName() != null && beerDTO.getType() != null && beerDTO.getBrand() != null) {
-            return beerDTO;
-        }
-        throw new BeerStockRequiredFieldException(beerDTO);
-    }
-
     public BeerDTO findByName(String name) throws BeerNotFoundException {
         Beer foundBeer = beerRepository.findByName(name)
                 .orElseThrow(() -> new BeerNotFoundException(name));
@@ -52,6 +45,11 @@ public class BeerService {
         beerRepository.deleteById(id);
     }
 
+    private void verifyIfFieldsAreNotNull(BeerDTO beerDTO) throws BeerStockRequiredFieldException {
+        if (beerDTO.getQuantity() == null || beerDTO.getName() == null || beerDTO.getType() == null || beerDTO.getBrand() == null)
+         throw new BeerStockRequiredFieldException(beerDTO);
+    }
+
     private void verifyIfIsAlreadyRegistered(String name) throws BeerAlreadyRegisteredException {
         Optional<Beer> optSavedBeer = beerRepository.findByName(name);
         if (optSavedBeer.isPresent()) {
@@ -64,8 +62,15 @@ public class BeerService {
                 .orElseThrow(() -> new BeerNotFoundException(id));
     }
 
-    public BeerDTO increment(Long id, int quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException {
+    private void verifyIfTheInputIsNotNegative(int quantity) throws NegativeInputException {
+        if(quantity < 0) {
+            throw new NegativeInputException(quantity);
+        }
+    }
+
+    public BeerDTO increment(Long id, int quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException, NegativeInputException {
         Beer beerToIncrementStock = verifyIfExists(id);
+        verifyIfTheInputIsNotNegative(quantityToIncrement);
         int quantityAfterIncrement = quantityToIncrement + beerToIncrementStock.getQuantity();
         if (quantityAfterIncrement <= beerToIncrementStock.getMax()) {
             beerToIncrementStock.setQuantity(beerToIncrementStock.getQuantity() + quantityToIncrement);
@@ -74,8 +79,9 @@ public class BeerService {
         }
         throw new BeerStockExceededException(id, quantityToIncrement);
     }
-    public BeerDTO decrement(Long id, int quantityToDecrement) throws BeerNotFoundException,  BeerStockMinCapacityExceededException {
+    public BeerDTO decrement(Long id, int quantityToDecrement) throws BeerNotFoundException, BeerStockMinCapacityExceededException, NegativeInputException {
         Beer beerToDecrementStock = verifyIfExists(id);
+        verifyIfTheInputIsNotNegative(quantityToDecrement);
         int quantityAfterDecrement = beerToDecrementStock.getQuantity() - quantityToDecrement;
         if (quantityAfterDecrement >= beerToDecrementStock.getMin()) {
             beerToDecrementStock.setQuantity(beerToDecrementStock.getQuantity() - quantityToDecrement);
