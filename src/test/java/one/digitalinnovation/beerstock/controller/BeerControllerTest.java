@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import java.util.Collections;
 import java.util.Optional;
-
 import static one.digitalinnovation.beerstock.utils.JsonConvertionUtils.asJsonString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,7 +57,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPOSTIsCalledThenABeerIsCreated() throws Exception {
+    void POSTIsCreated() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -76,7 +75,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenAlreadyRegisteredBeerInformedThenAnExceptionShouldBeThrown() throws Exception {
+    void POSTAlreadyRegisteredBeerException() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         // when
@@ -89,7 +88,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPOSTIsCalledWithoutRequiredFieldThenAnErrorIsReturned() throws Exception {
+    void POSTWithoutRequiredFieldException() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         beerDTO.setBrand(null);
@@ -103,7 +102,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenGETIsCalledWithValidNameThenOkStatusIsReturned() throws Exception {
+    void GETIValidName() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -120,7 +119,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenGETIsCalledWithoutRegisteredNameThenNotFoundStatusIsReturned() throws Exception {
+    void GETWithoutRegisteredNameException() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -134,7 +133,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenGETListWithBeersIsCalledThenOkStatusIsReturned() throws Exception {
+    void GETListWithBeers() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -151,7 +150,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenGETListWithoutBeersIsCalledThenOkStatusIsReturned() throws Exception {
+    void GETListWithoutBeers() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -165,7 +164,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenDELETEIsCalledWithValidIdThenNoContentStatusIsReturned() throws Exception {
+    void DELETEWithValidIdNoContentStatus() throws Exception {
         // given
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
@@ -179,7 +178,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenDELETEIsCalledWithInvalidIdThenNotFoundStatusIsReturned() throws Exception {
+    void DELETEWithInvalidIdNotFoundStatus() throws Exception {
         //when
         doThrow(BeerNotFoundException.class).when(beerService).deleteById(INVALID_BEER_ID);
 
@@ -190,7 +189,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPATCHIsCalledToIncrementDiscountThenOKStatusIsReturned() throws Exception {
+    void PATCHIncrementThenOKStatus() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
                 .quantity(10)
@@ -210,10 +209,10 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPATCHIsCalledToIncrementGreaterThanMaxThenBadRequestStatusIsReturned() throws Exception {
+    void PATCHIncrementGreaterThanMaxBeforeSumBadRequest() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
-                .quantity(30)
+                .quantity(51)
                 .build();
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
         //when
@@ -226,7 +225,23 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPATCHIsCalledWithInvalidBeerIdToIncrementThenNotFoundStatusIsReturned() throws Exception {
+    void PATCHIncrementGreaterThanMaxAfterSumBadRequestStatus() throws Exception {
+        //given
+        QuantityDTO quantityDTO = QuantityDTO.builder()
+                .quantity(41)
+                .build();
+        BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        //when
+        beerDTO.setQuantity(beerDTO.getQuantity() + quantityDTO.getQuantity());
+        when(beerService.increment(VALID_BEER_ID, quantityDTO.getQuantity())).thenThrow(BeerStockExceededException.class);
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.patch(BEER_API_URL_PATH + "/" + VALID_BEER_ID + BEER_API_SUBPATH_INCREMENT_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void PATCHInvalidBeerIdToIncrementNotFoundStatus() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
                 .quantity(30)
@@ -241,7 +256,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPATCHIsCalledToDecrementDiscountThenOKStatusIsReturned() throws Exception {
+    void PATCHDecrementOKStatus() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
                 .quantity(5)
@@ -261,7 +276,7 @@ public class BeerControllerTest {
     }
 
     @Test
-    void whenPATCHIsCalledToDecrementLowerThanZeroThenBadRequestStatusIsReturned() throws Exception {
+    void PATCHDecrementLowerThanZeroBadRequestStatus() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
                 .quantity(60)
@@ -276,7 +291,7 @@ public class BeerControllerTest {
                 .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
     }
     @Test
-    void whenPATCHIsCalledToDecrementWithNegativeInputThenBadRequestIsReturned() throws Exception {
+    void PATCHDecrementWithNegativeInputBadRequest() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
                 .quantity(-1)
@@ -291,7 +306,7 @@ public class BeerControllerTest {
                 .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
     }
     @Test
-    void whenPATCHIsCalledWithInvalidBeerIdToDecrementThenNotFoundStatusIsReturned() throws Exception {
+    void PATCHInvalidBeerIdToDecrementThenNotFoundStatus() throws Exception {
         //given
         QuantityDTO quantityDTO = QuantityDTO.builder()
                 .quantity(30)
