@@ -136,14 +136,7 @@ public class BeerServiceTest {
         verify(beerRepository, times(1)).findById(expectedDeletedBeerDTO.getId());
         verify(beerRepository, times(1)).deleteById(expectedDeletedBeerDTO.getId());
     }
-    //new
-    @Test
-    void exclusionInvalidIdException() {
-        //when
-        when(beerRepository.findById(INVALID_BEER_ID)).thenReturn(Optional.empty());
-        //then
-        assertThrows(BeerNotFoundException.class, () -> beerService.deleteById(INVALID_BEER_ID));
-    }
+
 //o
     @Test
     void incrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, NegativeInputException {
@@ -248,7 +241,28 @@ public class BeerServiceTest {
         //then
         assertThrows(BeerStockMinCapacityExceededException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
-//new
+
+//i
+    @Test
+    void decrementInvalidIdException() {
+        //given
+        int quantityToDecrement = 10;
+        //when
+        when(beerRepository.findById(INVALID_BEER_ID)).thenReturn(Optional.empty());
+        //then
+        assertThrows(BeerNotFoundException.class, () -> beerService.decrement(INVALID_BEER_ID, quantityToDecrement));
+    }
+
+    //new
+    @Test
+    void exclusionInvalidIdException() {
+        //when
+        when(beerRepository.findById(INVALID_BEER_ID)).thenReturn(Optional.empty());
+        //then
+        assertThrows(BeerNotFoundException.class, () -> beerService.deleteById(INVALID_BEER_ID));
+    }
+
+    //new
     @Test
     void decrementBeforeSumLowerThanZeroException() {
         //given
@@ -260,14 +274,5 @@ public class BeerServiceTest {
         //then
         assertThrows(NegativeInputException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
-//i
-    @Test
-    void decrementInvalidIdException() {
-        //given
-        int quantityToDecrement = 10;
-        //when
-        when(beerRepository.findById(INVALID_BEER_ID)).thenReturn(Optional.empty());
-        //then
-        assertThrows(BeerNotFoundException.class, () -> beerService.decrement(INVALID_BEER_ID, quantityToDecrement));
-    }
+
 }
