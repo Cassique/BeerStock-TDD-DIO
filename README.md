@@ -1,4 +1,14 @@
-<h2>Implementação dos testes que estavam comentados e escrita de mais 5 testes em BeerServiceTest: exclusionInvalidIdException() e decrementBeforeSumLowerThanZeroException() e em BeerControllerTest: POSTAlreadyRegisteredBeerException(), PATCHIncrementGreaterThanMaxBeforeSumBadRequest() e PATCHDecrementWithNegativeInputBadRequest()</h2>
+<h2>Implementação dos testes que estavam comentados e escrita de mais 5 testes. </h2>
+
+Testes extras escritos em BeerServiceTest:
+
+* exclusionInvalidIdException().
+* decrementBeforeSumLowerThanZeroException().
+
+Testes extras escritos em BeerControllerTest:
+* POSTAlreadyRegisteredBeerException().
+* PATCHIncrementGreaterThanMaxBeforeSumBadRequest().
+* PATCHDecrementWithNegativeInputBadRequest().
 
 Para executar o projeto no terminal, digite o seguinte comando:
 
