@@ -41,7 +41,7 @@ public class BeerServiceTest {
 
     @InjectMocks
     private BeerService beerService;
-
+//o
     @Test
     void beerCreated() throws BeerAlreadyRegisteredException, BeerStockRequiredFieldException {
         // given
@@ -58,7 +58,7 @@ public class BeerServiceTest {
         assertThat(createdBeerDTO.getName(), is(equalTo(expectedBeerDTO.getName())));
         assertThat(createdBeerDTO.getQuantity(), is(equalTo(expectedBeerDTO.getQuantity())));
     }
-
+//o
     @Test
     void alreadyRegisteredBeerException() {
         // given
@@ -71,7 +71,7 @@ public class BeerServiceTest {
         // then
         assertThrows(BeerAlreadyRegisteredException.class, () -> beerService.createBeer(expectedBeerDTO));
     }
-
+//o
     @Test
     void validBeerNameReturnABeer() throws BeerNotFoundException {
         // given
@@ -85,7 +85,7 @@ public class BeerServiceTest {
         BeerDTO foundBeerDTO = beerService.findByName(expectedFoundBeerDTO.getName());
         assertThat(foundBeerDTO, is(equalTo(expectedFoundBeerDTO)));
     }
-
+//o
     @Test
     void notRegisteredBeerNameException() {
         // given
@@ -97,7 +97,7 @@ public class BeerServiceTest {
         // then
         assertThrows(BeerNotFoundException.class, () -> beerService.findByName(expectedFoundBeerDTO.getName()));
     }
-
+//o
     @Test
     void listBeerIsCalledThenReturnAListOfBeers() {
         // given
@@ -112,7 +112,7 @@ public class BeerServiceTest {
         assertThat(foundListBeersDTO, is(not(empty())));
         assertThat(foundListBeersDTO.get(0), is(equalTo(expectedFoundBeerDTO)));
     }
-
+//o
     @Test
     void listBeerReturnAnEmptyListOfBeers() {
         //when
@@ -122,7 +122,7 @@ public class BeerServiceTest {
         List<BeerDTO> foundListBeersDTO = beerService.listAll();
         assertThat(foundListBeersDTO, is(empty()));
     }
-
+//o
     @Test
     void exclusionValidIdBeerDeleted() throws BeerNotFoundException{
         // given
@@ -136,6 +136,7 @@ public class BeerServiceTest {
         verify(beerRepository, times(1)).findById(expectedDeletedBeerDTO.getId());
         verify(beerRepository, times(1)).deleteById(expectedDeletedBeerDTO.getId());
     }
+    //new
     @Test
     void exclusionInvalidIdException() {
         //when
@@ -143,7 +144,7 @@ public class BeerServiceTest {
         //then
         assertThrows(BeerNotFoundException.class, () -> beerService.deleteById(INVALID_BEER_ID));
     }
-
+//o
     @Test
     void incrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, NegativeInputException {
         //given
@@ -163,9 +164,9 @@ public class BeerServiceTest {
         assertThat(expectedQuantityAfterIncrement, equalTo(incrementedBeerDTO.getQuantity()));
         assertThat(expectedQuantityAfterIncrement, lessThan(expectedBeerDTO.getMax()));
     }
-
+//o
     @Test
-    void incrementGreaterThanMaxException() {
+    void incrementBeforeSumGreaterThanMaxException() {
 
         //given
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
@@ -178,7 +179,7 @@ public class BeerServiceTest {
         //then
         assertThrows(BeerStockExceededException.class, () -> beerService.increment(expectedBeerDTO.getId(), quantityToIncrement));
     }
-
+//o
     @Test
     void incrementAfterSumGreaterThanMaxException() {
         //given
@@ -190,7 +191,7 @@ public class BeerServiceTest {
         int quantityToIncrement = 45;
         assertThrows(BeerStockExceededException.class, () -> beerService.increment(expectedBeerDTO.getId(), quantityToIncrement));
     }
-
+//o
     @Test
     void incrementInvalidIdException() {
         //given
@@ -200,7 +201,7 @@ public class BeerServiceTest {
         //then
         assertThrows(BeerNotFoundException.class, () -> beerService.increment(INVALID_BEER_ID, quantityToIncrement));
     }
-
+//i
     @Test
     void decrementBeerStock() throws BeerNotFoundException, BeerStockExceededException, BeerStockMinCapacityExceededException, NegativeInputException {
 
@@ -219,6 +220,7 @@ public class BeerServiceTest {
         assertThat(expectedQuantityAfterDecrement, equalTo(decrementedBeerDTO.getQuantity()));
         assertThat(expectedQuantityAfterDecrement, greaterThan(-1));
     }
+    //i
     @Test
     void decrementEmptyBeerStock() throws BeerNotFoundException {
 
@@ -227,7 +229,6 @@ public class BeerServiceTest {
                 .quantity(10)
                 .build();
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-        //Stock expectedStock = stockMapper.toModel(expectedStockDTO);
 
         //when
         int quantityToDecrement = 80;
@@ -235,7 +236,7 @@ public class BeerServiceTest {
         //then
         assertThrows(BeerNotFoundException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
-
+//i
     @Test
     void decrementAfterSumLowerThanZeroException() {
         //given
@@ -247,7 +248,7 @@ public class BeerServiceTest {
         //then
         assertThrows(BeerStockMinCapacityExceededException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
-
+//new
     @Test
     void decrementBeforeSumLowerThanZeroException() {
         //given
@@ -259,7 +260,7 @@ public class BeerServiceTest {
         //then
         assertThrows(NegativeInputException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
     }
-
+//i
     @Test
     void decrementInvalidIdException() {
         //given

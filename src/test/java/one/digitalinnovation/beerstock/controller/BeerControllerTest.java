@@ -55,7 +55,7 @@ public class BeerControllerTest {
                 .setViewResolvers((s, locale) -> new MappingJackson2JsonView())
                 .build();
     }
-
+//o
     @Test
     void POSTIsCreated() throws Exception {
         // given
@@ -73,7 +73,7 @@ public class BeerControllerTest {
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
                 .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
     }
-
+//new
     @Test
     void POSTAlreadyRegisteredBeerException() throws Exception {
         // given
@@ -86,7 +86,7 @@ public class BeerControllerTest {
                         .content(asJsonString(beerDTO)))
                 .andExpect(status().isBadRequest());
     }
-
+//o
     @Test
     void POSTWithoutRequiredFieldException() throws Exception {
         // given
@@ -100,7 +100,7 @@ public class BeerControllerTest {
                         .content(asJsonString(beerDTO)))
                 .andExpect(status().isBadRequest());
     }
-
+//o
     @Test
     void GETIValidName() throws Exception {
         // given
@@ -117,7 +117,7 @@ public class BeerControllerTest {
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
                 .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
     }
-
+//o
     @Test
     void GETWithoutRegisteredNameException() throws Exception {
         // given
@@ -131,7 +131,7 @@ public class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
-
+//o
     @Test
     void GETListWithBeers() throws Exception {
         // given
@@ -148,7 +148,7 @@ public class BeerControllerTest {
                 .andExpect(jsonPath("$[0].brand", is(beerDTO.getBrand())))
                 .andExpect(jsonPath("$[0].type", is(beerDTO.getType().toString())));
     }
-
+//o
     @Test
     void GETListWithoutBeers() throws Exception {
         // given
@@ -162,7 +162,7 @@ public class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
+//o
     @Test
     void DELETEWithValidIdNoContentStatus() throws Exception {
         // given
@@ -176,7 +176,7 @@ public class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
-
+//o
     @Test
     void DELETEWithInvalidIdNotFoundStatus() throws Exception {
         //when
@@ -187,7 +187,7 @@ public class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
-
+//o
     @Test
     void PATCHIncrementThenOKStatus() throws Exception {
         //given
@@ -207,7 +207,7 @@ public class BeerControllerTest {
                 .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())))
                 .andExpect(jsonPath("$.quantity", is(beerDTO.getQuantity())));
     }
-
+//new
     @Test
     void PATCHIncrementGreaterThanMaxBeforeSumBadRequest() throws Exception {
         //given
@@ -223,7 +223,7 @@ public class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
     }
-
+//i
     @Test
     void PATCHIncrementGreaterThanMaxAfterSumBadRequestStatus() throws Exception {
         //given
@@ -239,7 +239,7 @@ public class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
     }
-
+//i->
     @Test
     void PATCHInvalidBeerIdToIncrementNotFoundStatus() throws Exception {
         //given
@@ -255,6 +255,7 @@ public class BeerControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    //i->
     @Test
     void PATCHDecrementOKStatus() throws Exception {
         //given
@@ -274,7 +275,7 @@ public class BeerControllerTest {
                 .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())))
                 .andExpect(jsonPath("$.quantity", is(beerDTO.getQuantity())));
     }
-
+//i->
     @Test
     void PATCHDecrementLowerThanZeroBadRequestStatus() throws Exception {
         //given
@@ -282,7 +283,7 @@ public class BeerControllerTest {
                 .quantity(60)
                 .build();
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-        ////when
+        //when
         beerDTO.setQuantity(beerDTO.getQuantity() - quantityDTO.getQuantity());
         when(beerService.decrement(VALID_BEER_ID, quantityDTO.getQuantity())).thenThrow(BeerStockMinCapacityExceededException.class);
         //then
@@ -290,6 +291,7 @@ public class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
     }
+    //new
     @Test
     void PATCHDecrementWithNegativeInputBadRequest() throws Exception {
         //given
@@ -305,6 +307,7 @@ public class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(quantityDTO))).andExpect(status().isBadRequest());
     }
+    //i->
     @Test
     void PATCHInvalidBeerIdToDecrementThenNotFoundStatus() throws Exception {
         //given
