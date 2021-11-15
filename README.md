@@ -1,11 +1,11 @@
 <h2>Implementação dos testes que estavam comentados e escrita de mais 5 testes. </h2>
 
-Testes extras escritos em BeerServiceTest:
+Testes extras escritos em BeerServiceTest():
 
 * exclusionInvalidIdException().
 * decrementBeforeSumLowerThanZeroException().
 
-Testes extras escritos em BeerControllerTest:
+Testes extras escritos em BeerControllerTest():
 * POSTAlreadyRegisteredBeerException().
 * PATCHIncrementGreaterThanMaxBeforeSumBadRequest().
 * PATCHDecrementWithNegativeInputBadRequest().
